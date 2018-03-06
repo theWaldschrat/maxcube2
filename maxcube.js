@@ -160,10 +160,10 @@ MaxCube.prototype.getDeviceInfo = function(rf_address) {
 
   var device = this.deviceCache[rf_address];
   if (device) {
-    deviceInfo.device_type = device.device_type;
-    deviceInfo.device_name = device.device_name;
-    deviceInfo.battery_low = device.battery_low;
-    deviceInfo.panel_locked= device.panel_locked;
+    for(var item in device) {
+      var val = device[item];
+      deviceInfo[item] = val;
+    }
 
     if (device.room_id && this.roomCache[device.room_id]) {
       var room = this.roomCache[device.room_id];
@@ -171,7 +171,7 @@ MaxCube.prototype.getDeviceInfo = function(rf_address) {
       deviceInfo.room_id = room.room_id;
     }
   }
-  
+
   return deviceInfo;
 };
 
@@ -214,12 +214,12 @@ MaxCube.prototype.setSchedule = function(rf_address, room_id, weekday, temperatu
   // weekday:           0=mo,1=tu,..,6=su
   // temperaturesArray: [19.5,21,..] degrees Celsius (max 7)
   // timesArray:        ['HH:mm',..] 24h format (max 7, same amount as temperatures)
-  // the first time will be the time (from 00:00 to timesArray[0]) that the first temperature is active. Last possibe time of the day: 00:00 
+  // the first time will be the time (from 00:00 to timesArray[0]) that the first temperature is active. Last possibe time of the day: 00:00
 
   checkInitialised.call(this);
 
   var self = this;
-  
+
   var command = MaxCubeCommandFactory.generateSetDayProgramCommand (rf_address, room_id, weekday, temperaturesArray, timesArray);
   return send.call(this, command, 'S').then(function (res) {
     self.commStatus.duty_cycle = res.duty_cycle;
