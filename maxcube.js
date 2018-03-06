@@ -140,6 +140,20 @@ MaxCube.prototype.getDeviceStatus = function(rf_address) {
   });
 };
 
+MaxCube.prototype.getDeviceConfiguration = function(rf_address) {
+  checkInitialised.call(this);
+
+  return send.call(this, 'c:\r\n', 'C').then(function (devices) {
+    if (rf_address) {
+      return devices.filter(function(device) {
+        return device.rf_address === rf_address;
+      });
+    } else {
+      return devices;
+    }
+  });
+};
+
 MaxCube.prototype.getDevices = function() {
   checkInitialised.call(this);
 
