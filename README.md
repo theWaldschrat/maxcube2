@@ -6,7 +6,7 @@ This is a fork of the work first started by https://github.com/ivesdebruycker/ma
 
 ## Introduction
 ### History
-Why this library is called maxcube_2_? Because the maxcube project seemed to be dead without response to issues or PRs for over a year and when I finally decided to continue its legacy as "maxcube2" it suddenly got revived. Now I won't change the name of this library anymore and keep this fork for the homebridge-platform-maxcube project - still as a proper merge-able fork of maxcube however.
+Why this library is called maxcube_2_? Because the maxcube project seemed to be dead without response to issues or PRs for over half a year and I needed it fixed for my homebridge plugin. So I finally decided to continue its legacy as "maxcube2" but then it suddenly got revived. Now I won't change the name of this library anymore and keep this fork for the homebridge-platform-maxcube project - still as a proper merge-able fork of maxcube however.
 
 ### Changes from maxcube
 - More events (error, device_list etc.)
