@@ -25,6 +25,7 @@ function MaxCube(ip, port) {
   }
   this.roomCache = [];
   this.deviceCache = {};
+  this.configCache = {};
 
   this.maxCubeLowLevel.on('closed', function () {
     self.initialised = false;
@@ -65,7 +66,11 @@ function MaxCube(ip, port) {
       }
       case 'L': {
         self.updateDeviceInfo(parsedCommand);
-
+        break;
+      }
+      case 'C': {
+        self.updateDeviceConfig(parsedCommand);
+        break;
       }
     }
   });
@@ -87,6 +92,13 @@ function MaxCube(ip, port) {
           }
         }
       }
+    }
+  }
+
+  this.updateDeviceConfig = function(deviceConfig){
+    if (typeof deviceConfig != 'undefined'){
+      var rf = deviceConfig.rf_address;
+      self.configCache[rf] = deviceConfig;
     }
   }
 }
@@ -140,20 +152,6 @@ MaxCube.prototype.getDeviceStatus = function(rf_address) {
   });
 };
 
-MaxCube.prototype.getDeviceConfiguration = function(rf_address) {
-  checkInitialised.call(this);
-
-  return send.call(this, 'c:\r\n', 'C').then(function (devices) {
-    if (rf_address) {
-      return devices.filter(function(device) {
-        return device.rf_address === rf_address;
-      });
-    } else {
-      return devices;
-    }
-  });
-};
-
 MaxCube.prototype.getDevices = function() {
   checkInitialised.call(this);
 
@@ -174,10 +172,10 @@ MaxCube.prototype.getDeviceInfo = function(rf_address) {
 
   var device = this.deviceCache[rf_address];
   if (device) {
-    for(var item in device) {
-      var val = device[item];
-      deviceInfo[item] = val;
-    }
+    deviceInfo.device_type = device.device_type;
+    deviceInfo.device_name = device.device_name;
+    deviceInfo.battery_low = device.battery_low;
+    deviceInfo.panel_locked= device.panel_locked;
 
     if (device.room_id && this.roomCache[device.room_id]) {
       var room = this.roomCache[device.room_id];
@@ -187,6 +185,19 @@ MaxCube.prototype.getDeviceInfo = function(rf_address) {
   }
 
   return deviceInfo;
+};
+
+MaxCube.prototype.getDeviceConfiguration = function(rf_address) {
+  checkInitialised.call(this);
+  var deviceConfig = {}
+  var config = this.configCache[rf_address];
+  if (config) {
+    for(var item in config) {
+      var val = config[item];
+      deviceConfig[item] = val;
+    }
+  }
+  return deviceConfig;
 };
 
 MaxCube.prototype.getRooms = function() {
