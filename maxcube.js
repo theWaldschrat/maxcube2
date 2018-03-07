@@ -63,22 +63,24 @@ function MaxCube(ip, port) {
         self.commStatus.free_memory_slots = parsedCommand.free_memory_slots;
         self.metaInfo.serial_number       = parsedCommand.serial_number;
         self.metaInfo.firmware_version    = parsedCommand.firmware_version;
+        self.emit('hello', parsedCommand);
         break;
       }
       case 'M': {
         self.roomCache = parsedCommand.rooms;
         self.deviceCache = parsedCommand.devices;
         self.initialised = true;
+        self.emit('meta_data', parsedCommand);
         break;
       }
       case 'L': {
         self.updateDeviceInfo(parsedCommand);
-        self.emit('updated_list', parsedCommand);
+        self.emit('device_list', parsedCommand);
         break;
       }
       case 'C': {
         self.updateDeviceConfig(parsedCommand);
-        self.emit('updated_config', parsedCommand);
+        self.emit('configuration', parsedCommand);
         break;
       }
     }
