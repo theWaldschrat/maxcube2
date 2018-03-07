@@ -309,11 +309,9 @@ function decodeDeviceThermostat (payload) {
 }
 
 function decodeDeviceWallThermostat (payload) {
-  //regular device parsing
+  //regular device parsing, only temp is in a different location
   var deviceStatus = decodeDeviceThermostat (payload);
-
-	deviceStatus.temp = (payload[11]?25.5:0) + payload[12] / 10;
-
+  deviceStatus.temp = (payload[11]?25.5:0) + payload[12] / 10;
   return deviceStatus;
 }
 
