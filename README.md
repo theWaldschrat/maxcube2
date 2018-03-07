@@ -4,9 +4,15 @@ eQ-3 Max! Cube interface library for homebridge-platform-maxcube
 
 This is a fork of the work first started by https://github.com/ivesdebruycker/maxcube
 
-It includes support for window sensors, wall thermostats and schedules in addition to the basic features of the previous version of this library. The API didn't change so it's a drop-in replacement.
+## Introduction
+### History
+Why this library is called maxcube_2_? Because the maxcube project seemed to be dead without response to issues or PRs for over a year and when I finally decided to continue its legacy as "maxcube2" it suddenly got revived. Now I won't change the name of this library anymore and keep this fork for the homebridge-platform-maxcube project - still as a proper merge-able fork of maxcube however.
 
-It also adds support for more events and getting device configurations (min/max/eco/comfort temperatures etc.).
+### Changes from maxcube
+- More events (error, device_list etc.)
+- Getting device configurations (min/max/eco/comfort temperatures etc.)
+
+The old API didn't change currently so it's a drop-in replacement.
 
 ## Example
 ```
