@@ -15,6 +15,8 @@ function MaxCube(ip, port) {
   this.waitForCommandResolver = undefined;
   this.initialised = false;
 
+  this.setMaxListeners(1024);
+
   this.commStatus = {
     duty_cycle: 0,
     free_memory_slots: 0,
@@ -162,7 +164,7 @@ MaxCube.prototype.getDeviceStatus = function(rf_address) {
 MaxCube.prototype.updateDeviceStatus = function(rf_address) {
   checkInitialised.call(this);
 
-  send.call(this, 'l:\r\n', 'L');
+  send.call(this, 'l:\r\n');
 };
 
 MaxCube.prototype.getDevices = function() {
