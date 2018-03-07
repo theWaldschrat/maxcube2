@@ -163,7 +163,7 @@ MaxCube.prototype.getDeviceStatus = function(rf_address) {
   });
 };
 
-MaxCube.prototype.updateDeviceStatus = function(rf_address) {
+MaxCube.prototype.updateDeviceStatus = function() {
   checkInitialised.call(this);
 
   send.call(this, 'l:\r\n');
