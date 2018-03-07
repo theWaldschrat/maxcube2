@@ -66,10 +66,12 @@ function MaxCube(ip, port) {
       }
       case 'L': {
         self.updateDeviceInfo(parsedCommand);
+        self.emit('updated');
         break;
       }
       case 'C': {
         self.updateDeviceConfig(parsedCommand);
+        self.emit('updated_config', parsedCommand.rf_address);
         break;
       }
     }
@@ -152,10 +154,22 @@ MaxCube.prototype.getDeviceStatus = function(rf_address) {
   });
 };
 
+MaxCube.prototype.updateDeviceStatus = function(rf_address) {
+  checkInitialised.call(this);
+
+  send.call(this, 'l:\r\n', 'L');
+};
+
 MaxCube.prototype.getDevices = function() {
   checkInitialised.call(this);
 
   return this.deviceCache;
+};
+
+MaxCube.prototype.getDevice = function(rf_address) {
+  checkInitialised.call(this);
+
+  return this.deviceCache[rf_address];
 };
 
 MaxCube.prototype.getDeviceInfo = function(rf_address) {
