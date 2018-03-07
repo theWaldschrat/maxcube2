@@ -66,12 +66,12 @@ function MaxCube(ip, port) {
       }
       case 'L': {
         self.updateDeviceInfo(parsedCommand);
-        self.emit('updated');
+        self.emit('updated_list', parsedCommand);
         break;
       }
       case 'C': {
         self.updateDeviceConfig(parsedCommand);
-        self.emit('updated_config', parsedCommand.rf_address);
+        self.emit('updated_config', parsedCommand);
         break;
       }
     }
