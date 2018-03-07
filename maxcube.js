@@ -42,6 +42,11 @@ function MaxCube(ip, port) {
     }
   });
 
+  this.maxCubeLowLevel.on('error', function () {
+    self.initialised = false;
+    self.emit('error');
+  });
+
   this.maxCubeLowLevel.on('command', function (command) {
     var parsedCommand = MaxCubeCommandParser.parse(command.type, command.payload);
     if (self.waitForCommandType === command.type && self.waitForCommandResolver) {
