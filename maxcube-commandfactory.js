@@ -89,7 +89,7 @@ function generateSetTemperatureCommand (rfAdress, room_id, mode, temperature, un
 // =====================================================================
 // hex:  |    40     |    49     |
 // dual: | 0100 0000 | 0100 1001 |
-//         |||| ||||   |||| |||| 
+//         |||| ||||   |||| ||||
 //         |||| |||+---++++-++++-- Time: 0 0100 1001: 06:05
 //         |||| |||
 //         |||| |||+-------------- Temperature: 0100 000: 16
@@ -105,14 +105,14 @@ function generateSetDayProgramCommand (rfAdress, room_id, weekday, temperaturesA
   // weekday:     0=mo,1=tu,..,6=su
   // tempertures: [19.5,21,..] degrees Celsius (max 7)
   // times:       ['HH:mm',..] 24h format (max 7, same amount as temperatures)
-  
+
   var dayArr = ['010','011','100','101','110','000','001']; // mo - su
   var dayBin = dayArr[weekday];
   var reqDayBin = padLeft(dayBin, 8);
   var reqDayHex = parseInt(reqDayBin, 2).toString(16);
-  
+
   var hexTempTimeArr = [];
-  for (var i = 0; i < temperaturesArray.length; i++) 
+  for (var i = 0; i < temperaturesArray.length; i++)
   {
     if (i < 6 || i == temperaturesArray.length-1) // max: 7, take 6 first and last
     {
@@ -145,11 +145,19 @@ function generateSetDayProgramCommand (rfAdress, room_id, weekday, temperaturesA
   return data;
 }
 
+function generateResetCommand (rfAdress) {
+  var hexString      = rfAdress
+  var payload        = new Buffer(hexString, 'hex').toString('base64');
+  var data           = 'r:01,' + payload + '\r\n';
+  return data;
+}
+
 function padLeft(data, totalLength){
   return Array(totalLength - String(data).length + 1).join('0') + data;
 }
 
 module.exports = {
   generateSetTemperatureCommand: generateSetTemperatureCommand,
-  generateSetDayProgramCommand: generateSetDayProgramCommand
+  generateSetDayProgramCommand: generateSetDayProgramCommand,
+  generateResetCommand:generateResetCommand
 };
