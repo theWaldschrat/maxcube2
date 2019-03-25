@@ -52,6 +52,8 @@ myMaxCube.getConnection().then(function () {
 ```
 ### close()
 Closes the connection to the Max! Cube immediately (when active).
+### disconnect()
+Send **q** command to the Max! Cube and Cube will close a connection.
 ### getCommStatus()
 Returns the last known communication status (duty cycle & free memory slots).
 ### getDevices()

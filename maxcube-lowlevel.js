@@ -75,7 +75,9 @@ function connect () {
 }
 
 function close () {
-  this.socket.destroy();
+  if (this.socket) {
+    this.socket.destroy();
+  }
 }
 
 function send (dataStr) {

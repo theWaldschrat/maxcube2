@@ -30,7 +30,6 @@ function MaxCube(ip, port) {
   this.configCache = {};
 
   this.maxCubeLowLevel.on('closed', function () {
-    self.initialised = false;
     self.emit('closed');
   });
 
@@ -288,6 +287,10 @@ MaxCube.prototype.setSchedule = function(rf_address, room_id, weekday, temperatu
 
 MaxCube.prototype.close = function() {
   this.maxCubeLowLevel.close();
+};
+
+MaxCube.prototype.disconnect = function() {
+  send.call(this, 'q:\r\n');
 };
 
 module.exports = MaxCube;
