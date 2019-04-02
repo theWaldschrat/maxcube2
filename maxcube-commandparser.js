@@ -189,7 +189,7 @@ function parseCommandConfiguration (payload) {
   var payloadArr = payload.split(",");
   var rf_address = payloadArr[0].slice(0, 6).toString('hex');
 
-  var decodedPayload = new Buffer(payloadArr[1], 'base64');
+  var decodedPayload = Buffer.from(payloadArr[1], 'base64');
   var length = decodedPayload[0];
 
   var dataObj = {
@@ -205,7 +205,7 @@ function parseCommandConfiguration (payload) {
   };
 
   try {
-    if(dataObj.device_type !== 5){
+    if(dataObj.device_type == 1 || dataObj.device_type == 2){
       dataObj.weekly_program = {};
       var length = 26;
       var offset = 27;
@@ -227,7 +227,7 @@ function parseCommandConfiguration (payload) {
 
 function parseCommandDeviceList (payload) {
   var dataObj = [];
-  var decodedPayload = new Buffer(payload, 'base64');
+  var decodedPayload = Buffer.from(payload, 'base64');
 
   while (decodedPayload.length > 0) {
     if (decodedPayload.length >= decodedPayload[0]) {
