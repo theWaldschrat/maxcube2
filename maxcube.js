@@ -160,7 +160,7 @@ MaxCube.prototype.getCommStatus = function() {
   return this.commStatus;
 }
 
-MaxCube.prototype.getDeviceStatus = function(rf_address, timeout=0) {
+MaxCube.prototype.getDeviceStatus = function(rf_address=undefined, timeout=0) {
   checkInitialised.call(this);
 
   return send.call(this, 'l:\r\n', 'L', timeout).then(function (devices) {
