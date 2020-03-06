@@ -45,6 +45,13 @@ function initSocket () {
     });
   });
 
+  // If send has been called with timeout, this event will be emitted if there is no activity on the stream for the configured timeout
+  this.socket.on( 'timeout', function() {
+    console.error( 'Maxcube: Connection timed out.' );
+    // Timeout indicates a problem with the Cube, so emit error
+    self.emit( 'error', new Error( 'Maxcube: Connection timed out.' ) );
+  } );
+
   this.socket.on('close', function() {
     self.isConnected = false;
     self.emit('closed');
@@ -52,7 +59,7 @@ function initSocket () {
 
   this.socket.on('error', function(err) {
     console.error(err);
-      self.emit('error', err);
+    self.emit('error', err);
   });
 }
 
@@ -80,8 +87,11 @@ function close () {
   }
 }
 
-function send (dataStr) {
+// Can be called with and without timeout
+function send( dataStr, timeout=0 ) {
   this.socket.write(dataStr);
+  // Setting timeout to 0 disables the timeout
+  this.socket.setTimeout( timeout );
 }
 
 function isConnected () {
