@@ -52,7 +52,7 @@ function initSocket () {
 
   this.socket.on('error', function(err) {
     console.error(err);
-    self.emit('error');
+      self.emit('error', err);
   });
 }
 
