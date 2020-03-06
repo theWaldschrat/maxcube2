@@ -139,7 +139,7 @@ function send( command, replyCommandType, timeout=0 ) {
       self.maxCubeLowLevel.send( command, timeout );
       return waitForCommand.call(self, replyCommandType);
     } else {
-      // Don't set a timeout on commands that don't except a reply.
+      // Don't set a timeout on commands that don't expect a reply.
       self.maxCubeLowLevel.send( command, 0 );
       return Promise.resolve();
     }
@@ -160,10 +160,10 @@ MaxCube.prototype.getCommStatus = function() {
   return this.commStatus;
 }
 
-MaxCube.prototype.getDeviceStatus = function(rf_address) {
+MaxCube.prototype.getDeviceStatus = function(rf_address, timeout=0) {
   checkInitialised.call(this);
 
-  return send.call(this, 'l:\r\n', 'L').then(function (devices) {
+  return send.call(this, 'l:\r\n', 'L', timeout).then(function (devices) {
     if (rf_address) {
       return devices.filter(function(device) {
         return device.rf_address === rf_address;
@@ -246,36 +246,36 @@ MaxCube.prototype.flushDeviceCache = function() {
   return send.call(this, 'm:\r\n');
 };
 
-MaxCube.prototype.resetError = function(rf_address) {
+MaxCube.prototype.resetError = function(rf_address, timeout=0) {
   checkInitialised.call(this);
 
-  return send.call(this, MaxCubeCommandFactory.generateResetCommand(rf_address, this.deviceCache[rf_address].room_id), 'S');
+  return send.call(this, MaxCubeCommandFactory.generateResetCommand(rf_address, this.deviceCache[rf_address].room_id), 'S', timeout);
 };
 
-MaxCube.prototype.sayHello = function() {
+MaxCube.prototype.sayHello = function(timeout=0) {
   checkInitialised.call(this);
 
-  return send.call(this, 'h:\r\n', 'H').then(function (res) {
+  return send.call(this, 'h:\r\n', 'H', timeout).then(function (res) {
     self.commStatus.duty_cycle = res.duty_cycle;
     self.commStatus.free_memory_slots = res.free_memory_slots;
     return true;
   });
 };
 
-MaxCube.prototype.setTemperature = function(rf_address, degrees, mode, untilDate) {
+MaxCube.prototype.setTemperature = function(rf_address, degrees, mode, untilDate, timeout=0) {
   checkInitialised.call(this);
 
   var self = this;
   degrees = Math.max(2, degrees);
   var command = MaxCubeCommandFactory.generateSetTemperatureCommand (rf_address, this.deviceCache[rf_address].room_id, mode || 'MANUAL', degrees, untilDate);
-  return send.call(this, command, 'S').then(function (res) {
+  return send.call(this, command, 'S', timeout).then(function (res) {
     self.commStatus.duty_cycle = res.duty_cycle;
     self.commStatus.free_memory_slots = res.free_memory_slots;
     return res.accepted;
   });
 };
 
-MaxCube.prototype.setSchedule = function(rf_address, room_id, weekday, temperaturesArray, timesArray) {
+MaxCube.prototype.setSchedule = function(rf_address, room_id, weekday, temperaturesArray, timesArray, timeout=0) {
   // weekday:           0=mo,1=tu,..,6=su
   // temperaturesArray: [19.5,21,..] degrees Celsius (max 7)
   // timesArray:        ['HH:mm',..] 24h format (max 7, same amount as temperatures)
@@ -286,7 +286,7 @@ MaxCube.prototype.setSchedule = function(rf_address, room_id, weekday, temperatu
   var self = this;
 
   var command = MaxCubeCommandFactory.generateSetDayProgramCommand (rf_address, room_id, weekday, temperaturesArray, timesArray);
-  return send.call(this, command, 'S').then(function (res) {
+  return send.call(this, command, 'S', timeout).then(function (res) {
     self.commStatus.duty_cycle = res.duty_cycle;
     self.commStatus.free_memory_slots = res.free_memory_slots;
     return res.accepted;
