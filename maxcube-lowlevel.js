@@ -23,13 +23,16 @@ function initSocket () {
   var self = this;
   var previousPacketData = '';
 
-	this.socket.on('data', function(dataBuff) {
+  this.socket.on('data', function(dataBuff) {
     var dataStr = dataBuff.toString('utf-8');
 
     if (!dataStr.endsWith('\r\n')) {
       previousPacketData = dataStr;
       return;
     }
+
+    // Delete timeout after data has been received
+    self.socket.setTimeout( 0 );
 
     dataStr = previousPacketData + dataStr;
     previousPacketData = '';
