@@ -30,9 +30,11 @@ function MaxCube(ip, port) {
   this.configCache = {};
 
   this.maxCubeLowLevel.on('closed', function () {
-    self.waitForCommandResolver.reject( 'closed' );
-    self.waitForCommandType = undefined;
-    self.waitForCommandResolver = undefined;
+    if( self.waitForCommandResolver ) {
+      self.waitForCommandResolver.reject( 'closed' );
+      self.waitForCommandType = undefined;
+      self.waitForCommandResolver = undefined;
+    }
     self.emit('closed');
   });
 
@@ -48,9 +50,11 @@ function MaxCube(ip, port) {
 
   this.maxCubeLowLevel.on('error', function( err ) {
     self.initialised = false;
-    self.waitForCommandResolver.reject( 'closed' );
-    self.waitForCommandType = undefined;
-    self.waitForCommandResolver = undefined;
+    if( self.waitForCommandResolver ) {
+      self.waitForCommandResolver.reject( 'closed' );
+      self.waitForCommandType = undefined;
+      self.waitForCommandResolver = undefined;
+    }
     self.emit('error', err);
   });
 
