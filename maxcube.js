@@ -131,14 +131,16 @@ function waitForCommand (commandType) {
   return this.waitForCommandResolver.promise;
 }
 
-function send (command, replyCommandType) {
+function send( command, replyCommandType, timeout=0 ) {
   var self = this;
   return self.getConnection().then(function () {
-    self.maxCubeLowLevel.send(command);
-
-    if (replyCommandType) {
+    if( replyCommandType ) {
+      // On commands with expected reply set a timeout if requested
+      self.maxCubeLowLevel.send( command, timeout );
       return waitForCommand.call(self, replyCommandType);
     } else {
+      // Don't set a timeout on commands that don't except a reply.
+      self.maxCubeLowLevel.send( command, 0 );
       return Promise.resolve();
     }
   });
