@@ -43,9 +43,9 @@ function MaxCube(ip, port) {
     }
   });
 
-  this.maxCubeLowLevel.on('error', function () {
+  this.maxCubeLowLevel.on('error', function( err ) {
     self.initialised = false;
-    self.emit('error');
+    self.emit('error', err);
   });
 
   this.maxCubeLowLevel.on('command', function (command) {
